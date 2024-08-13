@@ -107,7 +107,7 @@
 
     function sjf(processes) {
         processes.sort((a, b) => a.time - b.time);
-        let result = 'Order of execution: ';
+        let result = 'Thứ tự: ';
         processes.forEach(p => {
             result += `${p.name} `;
         });
@@ -115,7 +115,7 @@
     }
 
     function roundRobin(processes, quantum) {
-        let result = 'Order of execution: ';
+        let result = 'Thứ tự: ';
         let queue = [...processes];
         while (queue.length > 0) {
             const current = queue.shift();
@@ -132,7 +132,7 @@
     function priorityScheduling(processes) {
         // For simplicity, assuming that processes with lower time have higher priority
         processes.sort((a, b) => a.time - b.time);
-        let result = 'Order of execution: ';
+        let result = 'Thứ tự: ';
         processes.forEach(p => {
             result += `${p.name} `;
         });
