@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPU Scheduling Algorithms</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+        }
+        .result p {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>CPU Scheduling Algorithms</h1>
+
+    <div class="form-group">
+        <label for="processes">ProEnter cesses (format: P1,5 P2,3 P3,2 ...):</label>
+        <input type="text" id="processes" placeholder="E.g., P1,5 P2,3 P3,2">
+    </div>
+
+    <div class="form-group">
+        <label for="quantum">Enter Quantum Time (For Round Robin only):</label>
+        <input type="text" id="quantum" placeholder="E.g., 2">
+    </div>
+
+    <div class="form-group">
+        <label for="algorithm">Choose Scheduling Algorithm:</label>
+        <select id="algorithm">
+            <option value="fcfs">First-Come, First-Served (FCFS)</option>
+            <option value="sjf">Shortest Job First (SJF)</option>
+            <option value="rr">Round Robin (RR)</option>
+            <option value="priority">Priority Scheduling</option>
+        </select>
+    </div>
+
+    <button onclick="schedule()">In ra </button>
+
+    <div class="result" id="result">
+        <!-- Scheduling results will appear here -->
+    </div>
+</div>
+
+<script>
+    function parseProcesses(input) {
+        const processes = input.split(' ').map(proc => {
+            const [name, time] = proc.split(',');
+            return { name, time: parseInt(time) };
+        });
+        return processes;
+    }
+
+    function fcfs(processes) {
+        let result = 'Thứ tự: ';
+        processes.forEach(p => {
+            result += `${p.name} `;
+        });
+        return result;
+    }
+
+    function sjf(processes) {
+        processes.sort((a, b) => a.time - b.time);
+        let result = 'Order of execution: ';
+        processes.forEach(p => {
+            result += `${p.name} `;
+        });
+        return result;
+    }
+
+    function roundRobin(processes, quantum) {
+        let result = 'Order of execution: ';
+        let queue = [...processes];
+        while (queue.length > 0) {
+            const current = queue.shift();
+            if (current.time > quantum) {
+                result += `${current.name} `;
+                queue.push({ name: current.name, time: current.time - quantum });
+            } else {
+                result += `${current.name} `;
+            }
+        }
+        return result;
+    }
+
+    function priorityScheduling(processes) {
+        // For simplicity, assuming that processes with lower time have higher priority
+        processes.sort((a, b) => a.time - b.time);
+        let result = 'Order of execution: ';
+        processes.forEach(p => {
+            result += `${p.name} `;
+        });
+        return result;
+    }
+
+    function schedule() {
+        const processesInput = document.getElementById('processes').value;
+        const quantumInput = document.getElementById('quantum').value;
+        const algorithm = document.getElementById('algorithm').value;
+        const processes = parseProcesses(processesInput);
+        let result;
+
+        switch (algorithm) {
+            case 'fcfs':
+                result = fcfs(processes);
+                break;
+            case 'sjf':
+                result = sjf(processes);
+                break;
+            case 'rr':
+                result = roundRobin(processes, parseInt(quantumInput));
+                break;
+            case 'priority':
+                result = priorityScheduling(processes);
+                break;
+        }
+
+        document.getElementById('result').innerHTML = `<p>${result}</p>`;
+    }
+</script>
+
+</body>
+</html>
